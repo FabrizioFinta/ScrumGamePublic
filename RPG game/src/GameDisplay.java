@@ -4,17 +4,17 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class Map extends TestClass{
+public class GameDisplay extends TestClass{
   
-  private Fields[][] fieldList = new Fields[getMaxFieldInRow()][getMaxFieldInRow()];
+  private Fields[][] fieldList;
   private ArrayList<String> dataList;
   
   
-  Map(String SourceFile){
-    Path file = Paths.get(SourceFile);
+  public GameDisplay(String MAP_LAYOUT_SOURCE, int fieldInARow){
+    Path file = Paths.get(MAP_LAYOUT_SOURCE);
     try {
       dataList = new ArrayList<>(Files.readAllLines(file));
-      
+      fieldList  = new Fields[fieldInARow][fieldInARow];
       int posXCounter = 0;
       int posYCounter = 0;
       for (int index = 0; index < dataList.size(); index++) {
@@ -36,7 +36,7 @@ public class Map extends TestClass{
     }
   }
   
-  Map(){
+  public GameDisplay(){
   }
   
   public Fields[][] getFieldList() {
