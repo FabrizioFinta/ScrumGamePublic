@@ -10,7 +10,9 @@ public class Table {
   
   public static GameElement[][] mapLists = new GameElement[10][10];
   ArrayList<GameElement> elementList = new ArrayList<>();
+  public static ArrayList<GameElement> monsterList = new ArrayList<>();
   Hero hero = new Hero();
+  
   
   public Table(){
   }
@@ -40,7 +42,9 @@ public class Table {
         posXCounter = 0;
         posYCounter += 1;
       }
+      monsterGenerator(3);
       elementList.add(hero);
+      elementList.addAll(monsterList);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -65,5 +69,11 @@ public class Table {
     }
   }
   
+  public void monsterGenerator(int numberOfMonsters){
+    for (int i = 0; i <= numberOfMonsters; i++) {
+      Monster monster = new Monster();
+      monsterList.add(monster);
+    }
+  }
   
 }
