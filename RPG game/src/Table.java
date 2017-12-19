@@ -28,11 +28,11 @@ public class Table {
         for (int subIndex = 0; subIndex < rows.length; subIndex++) {
           if (Integer.parseInt(rows[subIndex]) == 1) {
             GameElement element = new Wall(posXCounter, posYCounter);
-            mapLists[index][subIndex] = element;
+            mapLists[subIndex][index] = element;
             elementList.add(element);
           } else {
             GameElement element = new Floor(posXCounter, posYCounter);
-            mapLists[index][subIndex] = element;
+            mapLists[subIndex][index] = element;
             elementList.add(element);
           }
           posXCounter += 1;
@@ -50,8 +50,6 @@ public class Table {
     for (int index = 0; index < elementList.size(); index++) {
       elementList.get(index).draw(graphics);
     }
-    System.out.println(mapLists[1][0] instanceof Wall);
-    System.out.println(mapLists[0][1] instanceof Wall);
   }
   
   public void moveHero(KeyEvent e){
