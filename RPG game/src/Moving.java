@@ -1,21 +1,21 @@
 public abstract class Moving extends GameElement{
   
-  public int level = 1;
+  int level = 1;
   private double MaxHP;
   private double CurrentHP;
   private double DefendP;
   private double StrikeP;
   private boolean isDead;
-  int heroMoveCounter = 0;
+  protected int heroMoveCounter = 0;
   
-  public void moveUp(){
+  protected void moveUp(){
     if (getPositionY() != 0)  {
       if (!(Table.fieldLists[getPositionX()][getPositionY()-1] instanceof Wall)) {
         setPositionY(getPositionY() - 1);
       }
     }
   }
-  public void moveDown(){
+  protected void moveDown(){
   
     if (super.getPositionY() < 9) {
       if (!(Table.fieldLists[super.getPositionX()][getPositionY()+1] instanceof Wall)) {
@@ -23,14 +23,14 @@ public abstract class Moving extends GameElement{
       }
     }
   }
-  public void moveRight(){
+  protected void moveRight(){
     if (super.getPositionX() < 9) {
       if (!(Table.fieldLists[super.getPositionX()+1][super.getPositionY()] instanceof Wall)) {
         super.setPositionX(super.getPositionX() + 1);
       }
     }
   }
-  public void moveLeft(){
+  protected void moveLeft(){
     if(super.getPositionX() != 0) {
       if (!(Table.fieldLists[super.getPositionX()-1][super.getPositionY()] instanceof Wall)) {
         super.setPositionX(super.getPositionX() - 1);
@@ -38,38 +38,38 @@ public abstract class Moving extends GameElement{
     }
   }
   
-  public double getMaxHP() {
+  double getMaxHP() {
     return MaxHP;
   }
-  public void setMaxHP(double maxHP) {
+  void setMaxHP(double maxHP) {
     MaxHP = maxHP;
   }
   
   public double getCurrentHP() {
     return CurrentHP;
   }
-  public void setCurrentHP(double currentHP) {
+  void setCurrentHP(double currentHP) {
     CurrentHP = currentHP;
   }
   
-  public double getDefendP() {
+  double getDefendP() {
     return DefendP;
   }
-  public void setDefendP(double defendP) {
+  void setDefendP(double defendP) {
     DefendP = defendP;
   }
   
   public double getStrikeP() {
     return StrikeP;
   }
-  public void setStrikeP(double strikeP) {
+  void setStrikeP(double strikeP) {
     StrikeP = strikeP;
   }
   
-  public boolean isDead() {
+  boolean isDead() {
     return isDead;
   }
-  public void setDead() {
+  void setDead() {
     isDead = true;
   }
 }

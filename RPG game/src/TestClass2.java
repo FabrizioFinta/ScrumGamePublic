@@ -8,7 +8,7 @@ public class TestClass2 extends JComponent implements KeyListener {
   int testBoxX;
   int testBoxY;
   private final int SIZE = 720;
-  private static final String MAP_SOURCE = "field.txt";
+  private static final String MAP_SOURCE = "tempMapStructure.txt";
   private static Table table = new Table();
   
   public TestClass2() {

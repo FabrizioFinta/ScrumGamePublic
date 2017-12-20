@@ -1,8 +1,8 @@
-public class Monster extends Moving {
+class Monster extends Moving {
   
   private boolean hasKey;
   
-  public Monster(){
+  Monster(){
     Table.diceRoll.genRandStartPos();
     setPositionX(Table.diceRoll.getPosX());
     setPositionY(Table.diceRoll.getPosY());
@@ -12,7 +12,7 @@ public class Monster extends Moving {
     setStrikeP(level * Table.diceRoll.dice());
   }
   
-  public void moveMonsterRandomDir(){
+  void moveMonsterRandomDir(){
     //TODO need update: monsters have to move to the direction of the hero && shouldnt move in that dir where the wall is && shouldnt move on each other
     int direction = Table.diceRoll.getRandomMoveDirection();
     if(direction == 1){

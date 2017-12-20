@@ -1,21 +1,21 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class DiceRoll {
+class DiceRoll {
   
   private int posX;
   private int posY;
   private ArrayList<Integer> usedPosX = new ArrayList<>(Arrays.asList(0));
   private ArrayList<Integer> usedPosY = new ArrayList<>(Arrays.asList(0));
   
-  public int dice(){
+  int dice(){
     int max = 6;
     int min = 1;
     int range = (max-min) + 1;
     return (int)(Math.random()*range) + min;
   }
   
-  public void genRandStartPos(){
+  void genRandStartPos(){
     do{
       genRandomCoordinatePairs();
     }
@@ -25,10 +25,8 @@ public class DiceRoll {
   }
   
   private void genRandomCoordinatePairs(){
-    int posX = (int)(Math.random()*10);
-    this.posX = posX;
-    int posY = (int)(Math.random()*10);
-    this.posY = posY;
+    this.posX = (int)(Math.random()*10);
+    this.posY = (int)(Math.random()*10);
   }
   public int getPosX() {
     return posX;

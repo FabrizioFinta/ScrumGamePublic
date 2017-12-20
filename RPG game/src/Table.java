@@ -6,23 +6,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-public class Table {
+class Table {
   
   
   private final int NUMBER_OF_MONSTERS = 5;
   static DiceRoll diceRoll = new DiceRoll();
   static GameElement[][] fieldLists = new GameElement[10][10];
-  ArrayList<GameElement> elementList = new ArrayList<>();
-  ArrayList<Monster> monsterList = new ArrayList<>();
-  Hero hero = new Hero();
-  Boss boss = new Boss();
+  
+  private ArrayList<GameElement> elementList = new ArrayList<>();
+  protected ArrayList<Monster> monsterList = new ArrayList<>();
+  private Hero hero = new Hero();
+  private Boss boss = new Boss();
   
   
-  public Table(){
+  Table(){
   }
   
-  public void fill(String MAP_SOURCE){
-    Path file = Paths.get(MAP_SOURCE);
+  void fill(String mapSource){
+    Path file = Paths.get(mapSource);
   
     try {
       ArrayList<String> dataList = new ArrayList<>(Files.readAllLines(file));
@@ -49,20 +50,19 @@ public class Table {
       monsterGenerator(NUMBER_OF_MONSTERS);
       elementList.add(hero);
       elementList.add(boss);
-      monsterList.add(boss);
       elementList.addAll(monsterList);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
   
-  public void drawTable(Graphics graphics){
+  void drawTable(Graphics graphics){
     for (int index = 0; index < elementList.size(); index++) {
       elementList.get(index).draw(graphics);
     }
   }
   
-  public void moveHero(KeyEvent e){
+  void moveHero(KeyEvent e){
     
     if (e.getKeyCode() == KeyEvent.VK_UP) {
       hero.moveUp();
@@ -81,17 +81,21 @@ public class Table {
   
   private void monsterMotor() {
     if (hero.heroMoveCounter%2==0){
-      for (int i = 0; i < monsterList.size(); i++) {
-        monsterList.get(i).moveMonsterRandomDir();
+      for (Monster aMonsterList : monsterList) {
+        aMonsterList.moveMonsterRandomDir();
       }
     }
   }
   
-  public void monsterGenerator(int numberOfMonsters){
+  private void monsterGenerator(int numberOfMonsters){
     for (int i = 1; i <= numberOfMonsters; i++) {
       Monster monster = new Monster();
       monsterList.add(monster);
     }
+    monsterList.add(boss);
   }
   
+  void Batlle(GameElement monster, GameElement hero){
+  
+  }
 }

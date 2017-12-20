@@ -1,5 +1,5 @@
-public class Boss extends Monster {
-  public Boss(){
+class Boss extends Monster {
+  Boss(){
     super();
     setSourceIMG("boss.png");
     setMaxHP(2 * level * Table.diceRoll.dice() + Table.diceRoll.dice());
