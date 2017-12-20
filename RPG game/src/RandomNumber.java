@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class DiceRoll {
+class RandomNumber {
   
   private int posX;
   private int posY;
@@ -37,5 +37,9 @@ class DiceRoll {
   
   public int getRandomMoveDirection(){
     return (int)(Math.random()*4)+1;
+  }
+  
+  int genNumber(int min, int max){
+    return (int)((Math.random()*(max-min)+1)+min);
   }
 }

@@ -3,18 +3,18 @@ class Monster extends Moving {
   private boolean hasKey;
   
   Monster(){
-    Table.diceRoll.genRandStartPos();
-    setPositionX(Table.diceRoll.getPosX());
-    setPositionY(Table.diceRoll.getPosY());
+    Table.randomNumber.genRandStartPos();
+    setPositionX(Table.randomNumber.getPosX());
+    setPositionY(Table.randomNumber.getPosY());
     setSourceIMG("skeleton.png");
-    setMaxHP(2 * level * Table.diceRoll.dice());
-    setDefendP(level/2 * Table.diceRoll.dice());
-    setStrikeP(level * Table.diceRoll.dice());
+    setMaxHP(2 * level * Table.randomNumber.dice());
+    setDefendP(level/2 * Table.randomNumber.dice());
+    setStrikeP(level * Table.randomNumber.dice());
   }
   
   void moveMonsterRandomDir(){
     //TODO need update: monsters have to move to the direction of the hero && shouldnt move in that dir where the wall is && shouldnt move on each other
-    int direction = Table.diceRoll.getRandomMoveDirection();
+    int direction = Table.randomNumber.getRandomMoveDirection();
     if(direction == 1){
       moveUp();
     } else if ( direction == 2) {
@@ -24,5 +24,10 @@ class Monster extends Moving {
     } else {
       moveLeft();
     }
+  }
+  
+  void giveKey(){
+    this.hasKey = true;
+    setSourceIMG("skeletonWithKey.png");
   }
 }

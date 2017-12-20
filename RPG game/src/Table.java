@@ -10,13 +10,13 @@ class Table {
   
   
   private final int NUMBER_OF_MONSTERS = 5;
-  static DiceRoll diceRoll = new DiceRoll();
+  static RandomNumber randomNumber = new RandomNumber();
   static GameElement[][] fieldLists = new GameElement[10][10];
   
   private ArrayList<GameElement> elementList = new ArrayList<>();
   protected ArrayList<Monster> monsterList = new ArrayList<>();
   private Hero hero = new Hero();
-  private Boss boss = new Boss();
+  private Monster boss;
   
   
   Table(){
@@ -63,7 +63,6 @@ class Table {
   }
   
   void moveHero(KeyEvent e){
-    
     if (e.getKeyCode() == KeyEvent.VK_UP) {
       hero.moveUp();
       monsterMotor();
@@ -88,10 +87,15 @@ class Table {
   }
   
   private void monsterGenerator(int numberOfMonsters){
+    int indexOfMonsterWithKey = randomNumber.genNumber(1,numberOfMonsters);
     for (int i = 1; i <= numberOfMonsters; i++) {
       Monster monster = new Monster();
+      if (i == indexOfMonsterWithKey) {
+        monster.giveKey();
+      }
       monsterList.add(monster);
     }
+    boss = new Boss(); //TODO ask this solved the problem - Boss boss = new Boss(); >> Monster boss = new Boss();
     monsterList.add(boss);
   }
   
