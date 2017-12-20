@@ -1,6 +1,6 @@
 class Monster extends Moving {
   
-  private boolean hasKey;
+  boolean hasKey;
   
   Monster(){
     Table.randomNumber.genRandStartPos();

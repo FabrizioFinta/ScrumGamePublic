@@ -14,7 +14,7 @@ class Table {
   static GameElement[][] fieldLists = new GameElement[10][10];
   
   private ArrayList<GameElement> elementList = new ArrayList<>();
-  protected ArrayList<Monster> monsterList = new ArrayList<>();
+  private ArrayList<Monster> monsterList = new ArrayList<>();
   private Hero hero = new Hero();
   private Monster boss;
   
@@ -56,8 +56,8 @@ class Table {
   }
   
   void drawTable(Graphics graphics){
-    for (int index = 0; index < elementList.size(); index++) {
-      elementList.get(index).draw(graphics);
+    for (GameElement anElementList : elementList) {
+      anElementList.draw(graphics);
     }
   }
   
@@ -84,15 +84,14 @@ class Table {
     monsterList.add(boss);
   }
   
-  void batlle(GameElement monster, GameElement hero){
-  
+  private void battle(GameElement monster, GameElement hero){
   }
   
-  public void checkKeyEvent(KeyEvent e) {
+  void checkKeyEvent(KeyEvent e) {
     moveHero(e);
     checkCharacters(e);
   }
-  void moveHero(KeyEvent e){
+  private void moveHero(KeyEvent e){
     if (e.getKeyCode() == KeyEvent.VK_UP) {
       hero.moveUp();
       monsterMotor();
@@ -107,16 +106,16 @@ class Table {
       monsterMotor();
     }
   }
-  void checkCharacters(KeyEvent e){
+  private void checkCharacters(KeyEvent e){
     Monster monster;
-    for (int i = 0; i < monsterList.size(); i++) {
-      monster = monsterList.get(i);
-      if (!(monster.isDead())){
-        if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY() && e.getKeyCode() == KeyEvent.VK_SPACE){
+    for (Monster aMonsterList : monsterList) {
+      monster = aMonsterList;
+      if (! (monster.isDead())) {
+        if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY() && e.getKeyCode() == KeyEvent.VK_SPACE) {
           break;
         }
       }
-      batlle(monster, hero);
+      battle(monster, hero);
     }
   }
 }

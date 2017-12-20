@@ -28,14 +28,14 @@ class RandomNumber {
     this.posX = (int)(Math.random()*10);
     this.posY = (int)(Math.random()*10);
   }
-  public int getPosX() {
+  int getPosX() {
     return posX;
   }
-  public int getPosY() {
+  int getPosY() {
     return posY;
   }
   
-  public int getRandomMoveDirection(){
+  int getRandomMoveDirection(){
     return (int)(Math.random()*4)+1;
   }
   
