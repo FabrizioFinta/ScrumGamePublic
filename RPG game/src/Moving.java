@@ -9,16 +9,16 @@ public abstract class Moving extends GameElement{
   int heroMoveCounter = 0;
   
   public void moveUp(){
-    if (super.getPositionY() != 0)  {
-      if (!(Table.fieldLists[super.getPositionX()][super.getPositionY()-1] instanceof Wall)) {
-        super.setPositionY(super.getPositionY() - 1);
+    if (getPositionY() != 0)  {
+      if (!(Table.fieldLists[getPositionX()][getPositionY()-1] instanceof Wall)) {
+        setPositionY(getPositionY() - 1);
       }
     }
   }
   public void moveDown(){
   
     if (super.getPositionY() < 9) {
-      if (!(Table.fieldLists[super.getPositionX()][super.getPositionY()+1] instanceof Wall)) {
+      if (!(Table.fieldLists[super.getPositionX()][getPositionY()+1] instanceof Wall)) {
         super.setPositionY(super.getPositionY() + 1);
       }
     }
@@ -37,6 +37,7 @@ public abstract class Moving extends GameElement{
       }
     }
   }
+  
   public double getMaxHP() {
     return MaxHP;
   }

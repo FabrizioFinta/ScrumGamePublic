@@ -30,12 +30,14 @@ public class DiceRoll {
     int posY = (int)(Math.random()*10);
     this.posY = posY;
   }
-  
   public int getPosX() {
     return posX;
   }
-  
   public int getPosY() {
     return posY;
+  }
+  
+  public int getRandomMoveDirection(){
+    return (int)(Math.random()*4)+1;
   }
 }

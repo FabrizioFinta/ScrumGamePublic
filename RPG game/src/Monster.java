@@ -1,16 +1,28 @@
-import javafx.scene.control.Tab;
-
 public class Monster extends Moving {
   
   private boolean hasKey;
   
   public Monster(){
     Table.diceRoll.genRandStartPos();
-    super.setPositionX(Table.diceRoll.getPosX());
-    super.setPositionY(Table.diceRoll.getPosY());
-    super.setSourceIMG("skeleton.png");
-    super.setMaxHP(2 * level * Table.diceRoll.dice());
-    super.setDefendP(level/2 * Table.diceRoll.dice());
-    super.setStrikeP(level * Table.diceRoll.dice());
+    setPositionX(Table.diceRoll.getPosX());
+    setPositionY(Table.diceRoll.getPosY());
+    setSourceIMG("skeleton.png");
+    setMaxHP(2 * level * Table.diceRoll.dice());
+    setDefendP(level/2 * Table.diceRoll.dice());
+    setStrikeP(level * Table.diceRoll.dice());
+  }
+  
+  public void moveMonsterRandomDir(){
+    //TODO need update: monsters have to move to the direction of the hero && shouldnt move in that dir where the wall is && shouldnt move on each other
+    int direction = Table.diceRoll.getRandomMoveDirection();
+    if(direction == 1){
+      moveUp();
+    } else if ( direction == 2) {
+      moveRight();
+    } else if (direction == 3) {
+      moveDown();
+    } else {
+      moveLeft();
+    }
   }
 }

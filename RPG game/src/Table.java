@@ -13,8 +13,9 @@ public class Table {
   static DiceRoll diceRoll = new DiceRoll();
   static GameElement[][] fieldLists = new GameElement[10][10];
   ArrayList<GameElement> elementList = new ArrayList<>();
-  ArrayList<GameElement> monsterList = new ArrayList<>();
+  ArrayList<Monster> monsterList = new ArrayList<>();
   Hero hero = new Hero();
+  Boss boss = new Boss();
   
   
   public Table(){
@@ -47,6 +48,8 @@ public class Table {
       }
       monsterGenerator(NUMBER_OF_MONSTERS);
       elementList.add(hero);
+      elementList.add(boss);
+      monsterList.add(boss);
       elementList.addAll(monsterList);
     } catch (IOException e) {
       e.printStackTrace();
@@ -63,12 +66,24 @@ public class Table {
     
     if (e.getKeyCode() == KeyEvent.VK_UP) {
       hero.moveUp();
+      monsterMotor();
     } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
       hero.moveDown();
+      monsterMotor();
     } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
       hero.moveLeft();
+      monsterMotor();
     } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
       hero.moveRight();
+      monsterMotor();
+    }
+  }
+  
+  private void monsterMotor() {
+    if (hero.heroMoveCounter%2==0){
+      for (int i = 0; i < monsterList.size(); i++) {
+        monsterList.get(i).moveMonsterRandomDir();
+      }
     }
   }
   
