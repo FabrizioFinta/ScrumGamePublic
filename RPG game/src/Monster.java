@@ -15,9 +15,9 @@ class Monster extends Moving {
   void moveMonsterRandomDir(){
     //TODO need update: monsters have to move to the direction of the hero && shouldnt move in that dir where the wall is && shouldnt move on each other
     int direction = Table.randomNumber.getRandomMoveDirection();
-    if(direction == 1){
+    if (direction == 1) {
       moveUp();
-    } else if ( direction == 2) {
+    } else if (direction == 2) {
       moveRight();
     } else if (direction == 3) {
       moveDown();
@@ -29,5 +29,11 @@ class Monster extends Moving {
   void giveKey(){
     this.hasKey = true;
     setSourceIMG("skeletonWithKey.png");
+  }
+  
+  @Override
+  void killIt(){
+    setSourceIMG("skeletonDead.png");
+    super.killIt();
   }
 }

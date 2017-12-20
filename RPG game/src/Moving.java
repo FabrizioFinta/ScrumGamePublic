@@ -69,7 +69,12 @@ public abstract class Moving extends GameElement{
   boolean isDead() {
     return isDead;
   }
-  void setDead() {
+  
+  void killIt(){
     isDead = true;
+  }
+  
+  void levelUp(){
+    level++;
   }
 }

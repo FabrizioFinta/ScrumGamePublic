@@ -18,7 +18,6 @@ class Table {
   private Hero hero = new Hero();
   private Monster boss;
   
-  
   Table(){
   }
   
@@ -62,26 +61,12 @@ class Table {
     }
   }
   
-  void moveHero(KeyEvent e){
-    if (e.getKeyCode() == KeyEvent.VK_UP) {
-      hero.moveUp();
-      monsterMotor();
-    } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
-      hero.moveDown();
-      monsterMotor();
-    } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-      hero.moveLeft();
-      monsterMotor();
-    } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-      hero.moveRight();
-      monsterMotor();
-    }
-  }
-  
   private void monsterMotor() {
     if (hero.heroMoveCounter%2==0){
       for (Monster aMonsterList : monsterList) {
-        aMonsterList.moveMonsterRandomDir();
+        if (!(aMonsterList.isDead())) {
+          aMonsterList.moveMonsterRandomDir();
+        }
       }
     }
   }
@@ -99,7 +84,39 @@ class Table {
     monsterList.add(boss);
   }
   
-  void Batlle(GameElement monster, GameElement hero){
+  void batlle(GameElement monster, GameElement hero){
+    
+  }
   
+  public void checkKeyEvent(KeyEvent e) {
+    moveHero(e);
+    checkCharacters(e);
+  }
+  void moveHero(KeyEvent e){
+    if (e.getKeyCode() == KeyEvent.VK_UP) {
+      hero.moveUp();
+      monsterMotor();
+    } else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
+      hero.moveDown();
+      monsterMotor();
+    } else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+      hero.moveLeft();
+      monsterMotor();
+    } else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+      hero.moveRight();
+      monsterMotor();
+    }
+  }
+  void checkCharacters(KeyEvent e){
+    Monster monster;
+    for (int i = 0; i < monsterList.size(); i++) {
+      monster = monsterList.get(i);
+      if (!(monster.isDead())){
+        if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY() && e.getKeyCode() == KeyEvent.VK_SPACE){
+          break;
+        }
+      }
+      batlle(monster, hero);
+    }
   }
 }
