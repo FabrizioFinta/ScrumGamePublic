@@ -85,7 +85,7 @@ class Table {
   }
   
   void batlle(GameElement monster, GameElement hero){
-    
+  
   }
   
   public void checkKeyEvent(KeyEvent e) {
