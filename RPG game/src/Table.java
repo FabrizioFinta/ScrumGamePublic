@@ -8,9 +8,12 @@ import java.util.ArrayList;
 
 public class Table {
   
-  public static GameElement[][] mapLists = new GameElement[10][10];
+  
+  private final int NUMBER_OF_MONSTERS = 5;
+  static DiceRoll diceRoll = new DiceRoll();
+  static GameElement[][] fieldLists = new GameElement[10][10];
   ArrayList<GameElement> elementList = new ArrayList<>();
-  public static ArrayList<GameElement> monsterList = new ArrayList<>();
+  ArrayList<GameElement> monsterList = new ArrayList<>();
   Hero hero = new Hero();
   
   
@@ -30,11 +33,11 @@ public class Table {
         for (int subIndex = 0; subIndex < rows.length; subIndex++) {
           if (Integer.parseInt(rows[subIndex]) == 1) {
             GameElement element = new Wall(posXCounter, posYCounter);
-            mapLists[subIndex][index] = element;
+            fieldLists[subIndex][index] = element;
             elementList.add(element);
           } else {
             GameElement element = new Floor(posXCounter, posYCounter);
-            mapLists[subIndex][index] = element;
+            fieldLists[subIndex][index] = element;
             elementList.add(element);
           }
           posXCounter += 1;
@@ -42,7 +45,7 @@ public class Table {
         posXCounter = 0;
         posYCounter += 1;
       }
-      monsterGenerator(3);
+      monsterGenerator(NUMBER_OF_MONSTERS);
       elementList.add(hero);
       elementList.addAll(monsterList);
     } catch (IOException e) {
@@ -70,7 +73,7 @@ public class Table {
   }
   
   public void monsterGenerator(int numberOfMonsters){
-    for (int i = 0; i <= numberOfMonsters; i++) {
+    for (int i = 1; i <= numberOfMonsters; i++) {
       Monster monster = new Monster();
       monsterList.add(monster);
     }
