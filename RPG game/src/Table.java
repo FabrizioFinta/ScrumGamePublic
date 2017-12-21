@@ -86,12 +86,11 @@ class Table {
   }
   
   void stageComplated(){
+    currentStage++;
     for (int i = 0; i < monsterList.size(); i++) {
       monsterList.get(i).levelUp();
-      monsterList.get(i).restoreHP();
     }
-    //Random chances to restore the hero's hp
-    currentStage++;
+    hero.restoreHeroHP();
   }
   int getCurrentStage(){
     return currentStage;

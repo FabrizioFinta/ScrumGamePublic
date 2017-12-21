@@ -7,6 +7,11 @@ public abstract class Moving extends GameElement{
   private double StrikeP;
   private boolean isDead;
   protected int heroMoveCounter = 0;
+  
+  protected Moving(){
+    restoreHP();
+  }
+  
   protected void moveUp(){
     if (getPositionY() != 0)  {
       if (!(Table.fieldLists[getPositionX()][getPositionY()-1] instanceof Wall)) {
@@ -63,6 +68,10 @@ public abstract class Moving extends GameElement{
   }
   void setStrikeP(double strikeP) {
     StrikeP = strikeP;
+  }
+  
+  void restoreHP(){
+    setCurrentHP(getMaxHP());
   }
   
   boolean isDead() {

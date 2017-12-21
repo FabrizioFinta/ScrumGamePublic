@@ -10,7 +10,6 @@ class Monster extends Moving {
     setPositionY(Table.randomNumber.getPosY());
     setSourceIMG("skeleton.png");
     setMaxHP(2 * level * Table.randomNumber.dice());
-    setCurrentHP(getMaxHP());
     setDefendP(level/2 * Table.randomNumber.dice());
     setStrikeP(level * Table.randomNumber.dice());
   }
@@ -33,10 +32,6 @@ class Monster extends Moving {
     }
   }
   
-  void restoreHP(){
-    setCurrentHP(getMaxHP());
-  }
-  
   void giveKey(){
     this.hasKey = true;
     setSourceIMG("skeletonWithKey.png");
@@ -53,6 +48,12 @@ class Monster extends Moving {
   
   public int getPrevPostitionY() {
     return prevPostitionY;
+  }
+  
+  @Override
+  void levelUp() {
+    super.levelUp();
+    restoreHP();
   }
   
   @Override

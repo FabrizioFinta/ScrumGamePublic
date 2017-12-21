@@ -7,13 +7,16 @@ class Hero extends Moving{
     super.setPositionX(0);
     super.setSourceIMG("hero-down.png");
     setMaxHP(20 + 3 * Table.randomNumber.dice());
-    setCurrentHP(getMaxHP());
     setDefendP(2 * Table.randomNumber.dice());
     setStrikeP(5 + Table.randomNumber.dice());
   }
   
   void giveKey(){
     hasKey = true;
+  }
+  
+  void restoreHeroHP(){
+    //randomnumber chances method needed
   }
   
   @Override
