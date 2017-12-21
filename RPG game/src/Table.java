@@ -65,6 +65,7 @@ class Table {
   }
   void drawGameOver(Graphics graphics){
     PositionedImage image = new PositionedImage("GameOver.png", 0, 0);
+    image.draw(graphics);
   }
   
   private void monsterMotor() {
