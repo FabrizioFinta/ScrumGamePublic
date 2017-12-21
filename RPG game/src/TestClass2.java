@@ -17,19 +17,23 @@ public class TestClass2 extends JComponent implements KeyListener {
   @Override
   public void paint(Graphics graphics) { //Here is the motor of the graphics
     super.paint(graphics);
+    if (table.isNotGameOver){
     table.drawTable(graphics);
+    } else {
+      table.drawGameOver(graphics);
+    }
   }
   
   public static void main(String[] args) {
     table.fill(MAP_SOURCE);
-    JFrame frame = new JFrame("RPG Game");
-    TestClass2 board = new TestClass2();
-    frame.add(board);
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    frame.setVisible(true);
-    frame.pack();
-    frame.addKeyListener(board);
-  }
+      JFrame frame = new JFrame("RPG Game");
+      TestClass2 board = new TestClass2();
+      frame.add(board);
+      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+      frame.setVisible(true);
+      frame.pack();
+      frame.addKeyListener(board);
+    }
   
   @Override
   public void keyTyped(KeyEvent e) {

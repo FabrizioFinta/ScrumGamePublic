@@ -7,9 +7,20 @@ public abstract class Moving extends GameElement{
   private double StrikeP;
   private boolean isDead;
   protected int heroMoveCounter = 0;
+  boolean hasKey;
   
-  protected Moving(){
-    restoreHP();
+  Moving(){
+  }
+  
+  void depriveFromKey(){
+    hasKey = false;
+  }
+  
+  void giveKey(){
+    hasKey = true;
+  }
+  boolean getHasKey(){
+    return hasKey;
   }
   
   protected void moveUp(){
@@ -72,14 +83,18 @@ public abstract class Moving extends GameElement{
   
   void restoreHP(){
     setCurrentHP(getMaxHP());
-  }
+  } //DOESNT WORK
   
   boolean isDead() {
     return isDead;
   }
   
-  void killIt(){
+  void execute(){
     isDead = true;
+  }
+  
+  void resurrect(){
+    isDead = false;
   }
   
   void levelUp(){

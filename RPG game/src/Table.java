@@ -12,10 +12,12 @@ class Table {
   private final int NUMBER_OF_MONSTERS = 5;
   static RandomNumber randomNumber = new RandomNumber();
   static GameElement[][] fieldLists = new GameElement[10][10];
+  boolean isNotGameOver = true;
   
   private ArrayList<GameElement> elementList = new ArrayList<>();
   private ArrayList<Monster> monsterList = new ArrayList<>();
   private Hero hero = new Hero();
+  boolean heroIsWinner = true;
   private Monster boss;
   private int currentStage = 1;
   
@@ -61,6 +63,9 @@ class Table {
       anElementList.draw(graphics);
     }
   }
+  void drawGameOver(Graphics graphics){
+    PositionedImage image = new PositionedImage("GameOver.png", 0, 0);
+  }
   
   private void monsterMotor() {
     if (hero.heroMoveCounter%2==0){
@@ -86,11 +91,17 @@ class Table {
   }
   
   void stageComplated(){
+    //Show new stage subtitle
     currentStage++;
     for (int i = 0; i < monsterList.size(); i++) {
+      monsterList.get(i).resurrect();
+      randomNumber.genRandStartPos(false);
+      monsterList.get(i).setPositionX(randomNumber.getPosX());
+      monsterList.get(i).setPositionY(randomNumber.getPosY());
       monsterList.get(i).levelUp();
     }
     hero.restoreHeroHP();
+    hero.depriveFromKey();
   }
   int getCurrentStage(){
     return currentStage;
@@ -98,7 +109,6 @@ class Table {
   
   private boolean battle(Moving attacker, Moving defender){
     //TODO set a third type picture to illustrate the battle
-    boolean heroIsWinner = true;
     int roundCounter = 0;
     do {
       double attackerSV = attacker.getStrikeP() + randomNumber.dice()*2;
@@ -106,33 +116,55 @@ class Table {
       if (roundCounter % 2 == 0){
         if (attackerSV > defender.getDefendP()){
           defender.setCurrentHP(defender.getCurrentHP() - (attackerSV - defender.getDefendP()));
-        } else {
+        }
+      } else {
           if (defenderSV > attacker.getDefendP()) {
             attacker.setCurrentHP(attacker.getCurrentHP() - (defenderSV - attacker.getDefendP()));
           }
-        }
       }
-      if (attacker.getCurrentHP() <= 0){
-        if (attacker instanceof Hero) {
-          heroIsWinner = false;
-        }
-        attacker.killIt();
-      }
-      if (defender.getCurrentHP() <= 0) {
-        if (defender instanceof Hero) {
-          heroIsWinner = false;
-      }
-        defender.killIt();
-      }
+      executioner(attacker);
+      executioner(defender);
       roundCounter ++;
     } while(!(attacker.isDead()) && !(defender.isDead()));
+    if (heroIsWinner){
+      passKeyIfHas(attacker);
+      passKeyIfHas(defender);
+    }
     return heroIsWinner;
   }
   
-  void checkKeyEvent(KeyEvent e) {
-    moveHero(e);
-    checkCharacters(e);
+  private void passKeyIfHas(Moving character) {
+    if (character instanceof Monster && character.getHasKey()) {
+      hero.giveKey();
+    }
   }
+  private void executioner(Moving victim){
+    if (victim.getCurrentHP() <= 0) {
+      if (victim instanceof Hero) {
+        heroIsWinner = false;
+      }
+      victim.execute();
+    }
+  }
+  
+  void checkKeyEvent(KeyEvent e) {
+    if(isNotGameOver) {
+      moveHero(e);
+      checkCharacters(e);
+    } else {
+      checkDecision(e);
+    }
+  }
+  
+  private void checkDecision(KeyEvent e) {
+    if (e.getKeyCode() == KeyEvent.VK_ENTER){
+      //Start over again from the beginning
+    }
+    if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
+      //Quit
+    }
+  }
+  
   private void moveHero(KeyEvent e){
     if (e.getKeyCode() == KeyEvent.VK_UP) {
       hero.moveUp();
@@ -156,9 +188,11 @@ class Table {
         if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY()) {
           hero.setSourceIMG("heroSword.png");
           if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            if (!(battle(hero, monster))) {
-              //Game should end.
-            } //TODO else check the monster had key, if it had then give it to the hero
+            if (battle(hero, monster)) {
+              hero.levelUp();
+            } else {
+              isNotGameOver = false;
+            }
           }
           break;
         }
@@ -167,6 +201,9 @@ class Table {
           //break;
        // }
       }
+    }
+    if(boss.isDead() && hero.getHasKey()){
+    stageComplated();
     }
   }
 }

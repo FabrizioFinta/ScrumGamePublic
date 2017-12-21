@@ -15,8 +15,25 @@ class RandomNumber {
     return (int)(Math.random()*range) + min;
   }
   
-  void genRandStartPos(){
-    do{
+  void genRandStartPos(boolean keepThePreviousPositions){
+    if (keepThePreviousPositions) {
+      generateNotSamePositionPairs();
+    } else{
+      usedPosX.removeAll(usedPosX);
+      usedPosY.removeAll(usedPosY);
+      usedPosY.add(0);
+      usedPosX.add(0);
+      do {
+        genRandomCoordinatePairs();
+      }
+      while (Table.fieldLists[posX][posY] instanceof Wall || (usedPosX.contains(posX) && usedPosY.contains(posY)));
+      usedPosX.add(posX);
+      usedPosY.add(posY);
+    }
+  }
+  
+  private void generateNotSamePositionPairs() {
+    do {
       genRandomCoordinatePairs();
     }
     while (Table.fieldLists[posX][posY] instanceof Wall || (usedPosX.contains(posX) && usedPosY.contains(posY)));
@@ -34,8 +51,6 @@ class RandomNumber {
   int getPosY() {
     return posY;
   }
-  
-  //TODO random thing of chanceses
   
   int getRandomMoveDirection(){
     return (int)(Math.random()*4)+1;

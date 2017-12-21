@@ -1,22 +1,24 @@
 class Hero extends Moving{
   
-  boolean hasKey;
-  
   Hero(){
     super.setPositionX(0);
     super.setPositionX(0);
     super.setSourceIMG("hero-down.png");
     setMaxHP(20 + 3 * Table.randomNumber.dice());
+    restoreHP();
     setDefendP(2 * Table.randomNumber.dice());
     setStrikeP(5 + Table.randomNumber.dice());
   }
   
-  void giveKey(){
-    hasKey = true;
-  }
-  
   void restoreHeroHP(){
-    //randomnumber chances method needed
+    int luckyNumber = Table.randomNumber.genNumber(1,10);
+    if(luckyNumber == 1){
+      restoreHP();
+    } else if (luckyNumber <= 5){
+      setCurrentHP(getCurrentHP() + getMaxHP()/3);
+    } else if (luckyNumber <= 10) {
+      setCurrentHP(getCurrentHP() + getMaxHP()/10);
+    }
   }
   
   @Override
@@ -28,21 +30,33 @@ class Hero extends Moving{
   
   @Override
   protected void moveDown() {
-    super.setSourceIMG("hero-down.png");
+    if(hasKey) {
+      super.setSourceIMG("hero-down-key.png");
+    } else {
+      super.setSourceIMG("hero-down.png");
+    }
     super.moveDown();
     super.heroMoveCounter++;
   }
   
   @Override
   protected void moveRight() {
-    super.setSourceIMG("hero-right.png");
+    if(hasKey) {
+      super.setSourceIMG("hero-right-key.png");
+    } else {
+      super.setSourceIMG("hero-right.png");
+    }
     super.moveRight();
     super.heroMoveCounter++;
   }
   
   @Override
   protected void moveLeft() {
-    super.setSourceIMG("hero-left.png");
+    if(hasKey) {
+      super.setSourceIMG("hero-left-key.png");
+    } else {
+      super.setSourceIMG("hero-left.png");
+    }
     super.moveLeft();
     super.heroMoveCounter++;
   }

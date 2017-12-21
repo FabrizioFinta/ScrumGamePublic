@@ -1,15 +1,15 @@
 class Monster extends Moving {
   
-  boolean hasKey;
   private int prevPositionX;
   private int prevPostitionY;
   
   Monster(){
-    Table.randomNumber.genRandStartPos();
+    Table.randomNumber.genRandStartPos(true);
     setPositionX(Table.randomNumber.getPosX());
     setPositionY(Table.randomNumber.getPosY());
     setSourceIMG("skeleton.png");
     setMaxHP(2 * level * Table.randomNumber.dice());
+    restoreHP();
     setDefendP(level/2 * Table.randomNumber.dice());
     setStrikeP(level * Table.randomNumber.dice());
   }
@@ -32,11 +32,6 @@ class Monster extends Moving {
     }
   }
   
-  void giveKey(){
-    this.hasKey = true;
-    setSourceIMG("skeletonWithKey.png");
-  }
-  
   void storePositions(){
     prevPositionX = getPositionX();
     prevPostitionY = getPositionY();
@@ -57,8 +52,14 @@ class Monster extends Moving {
   }
   
   @Override
-  void killIt(){
+  void execute(){
     setSourceIMG("skeletonDead.png");
-    super.killIt();
+    super.execute();
+  }
+  
+  @Override
+  void resurrect() {
+    super.resurrect();
+    setSourceIMG("skeleton.png");
   }
 }
