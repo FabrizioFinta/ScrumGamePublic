@@ -35,6 +35,8 @@ class RandomNumber {
     return posY;
   }
   
+  //TODO random thing of chanceses
+  
   int getRandomMoveDirection(){
     return (int)(Math.random()*4)+1;
   }

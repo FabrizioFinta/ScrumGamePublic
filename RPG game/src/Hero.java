@@ -1,12 +1,19 @@
 class Hero extends Moving{
   
+  boolean hasKey;
+  
   Hero(){
     super.setPositionX(0);
     super.setPositionX(0);
     super.setSourceIMG("hero-down.png");
     setMaxHP(20 + 3 * Table.randomNumber.dice());
+    setCurrentHP(getMaxHP());
     setDefendP(2 * Table.randomNumber.dice());
     setStrikeP(5 + Table.randomNumber.dice());
+  }
+  
+  void giveKey(){
+    hasKey = true;
   }
   
   @Override

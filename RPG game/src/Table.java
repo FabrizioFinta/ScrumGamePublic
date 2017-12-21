@@ -17,6 +17,7 @@ class Table {
   private ArrayList<Monster> monsterList = new ArrayList<>();
   private Hero hero = new Hero();
   private Monster boss;
+  private int currentStage = 1;
   
   Table(){
   }
@@ -47,9 +48,9 @@ class Table {
         posYCounter += 1;
       }
       monsterGenerator(NUMBER_OF_MONSTERS);
+      elementList.addAll(monsterList);
       elementList.add(hero);
       elementList.add(boss);
-      elementList.addAll(monsterList);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -84,7 +85,49 @@ class Table {
     monsterList.add(boss);
   }
   
-  private void battle(GameElement monster, GameElement hero){
+  void stageComplated(){
+    for (int i = 0; i < monsterList.size(); i++) {
+      monsterList.get(i).levelUp();
+      monsterList.get(i).restoreHP();
+    }
+    //Random chances to restore the hero's hp
+    currentStage++;
+  }
+  int getCurrentStage(){
+    return currentStage;
+  }
+  
+  private boolean battle(Moving attacker, Moving defender){
+    //TODO set a third type picture to illustrate the battle
+    boolean heroIsWinner = true;
+    int roundCounter = 0;
+    do {
+      double attackerSV = attacker.getStrikeP() + randomNumber.dice()*2;
+      double defenderSV = defender.getStrikeP() + randomNumber.dice()*2;
+      if (roundCounter % 2 == 0){
+        if (attackerSV > defender.getDefendP()){
+          defender.setCurrentHP(defender.getCurrentHP() - (attackerSV - defender.getDefendP()));
+        } else {
+          if (defenderSV > attacker.getDefendP()) {
+            attacker.setCurrentHP(attacker.getCurrentHP() - (defenderSV - attacker.getDefendP()));
+          }
+        }
+      }
+      if (attacker.getCurrentHP() <= 0){
+        if (attacker instanceof Hero) {
+          heroIsWinner = false;
+        }
+        attacker.killIt();
+      }
+      if (defender.getCurrentHP() <= 0) {
+        if (defender instanceof Hero) {
+          heroIsWinner = false;
+      }
+        defender.killIt();
+      }
+      roundCounter ++;
+    } while(!(attacker.isDead()) && !(defender.isDead()));
+    return heroIsWinner;
   }
   
   void checkKeyEvent(KeyEvent e) {
@@ -111,11 +154,20 @@ class Table {
     for (Monster aMonsterList : monsterList) {
       monster = aMonsterList;
       if (! (monster.isDead())) {
-        if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY() && e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY()) {
+          hero.setSourceIMG("heroSword.png");
+          if (e.getKeyCode() == KeyEvent.VK_SPACE){
+            if (!(battle(hero, monster))) {
+              //Game should end.
+            } //TODO else check the monster had key, if it had then give it to the hero
+          }
           break;
         }
+        //if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY() && monster.getPrevPositionX() != monster.getPositionX() || monster.getPrevPostitionY() != monster.getPositionY()){
+          //battle(monster, hero);
+          //break;
+       // }
       }
-      battle(monster, hero);
     }
   }
 }
