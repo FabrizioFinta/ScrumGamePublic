@@ -11,25 +11,24 @@ class Table {
   
   private final int NUMBER_OF_MONSTERS = 5;
   static RandomNumber randomNumber = new RandomNumber();
-  static GameElement[][] fieldLists = new GameElement[10][10];
   boolean isNotGameOver = true;
-  
+  static GameElement[][] fieldLists = new GameElement[10][10];
   private ArrayList<GameElement> elementList = new ArrayList<>();
   private ArrayList<Monster> monsterList = new ArrayList<>();
   private Hero hero = new Hero();
-  boolean heroIsWinner = true;
+  private boolean heroIsWinner = true;
   private Monster boss;
-  private int currentStage = 1;
+  private static int currentStage = 1;
+  private final Font f = new Font("Arial", Font.BOLD, 15);
   
   Table(){
   }
   
-  void fill(String mapSource){
+  void fillMap(String mapSource){
     Path file = Paths.get(mapSource);
   
     try {
       ArrayList<String> dataList = new ArrayList<>(Files.readAllLines(file));
-    
       int posXCounter = 0;
       int posYCounter = 0;
       for (int index = 0; index < dataList.size(); index++) {
@@ -38,24 +37,27 @@ class Table {
           if (Integer.parseInt(rows[subIndex]) == 1) {
             GameElement element = new Wall(posXCounter, posYCounter);
             fieldLists[subIndex][index] = element;
-            elementList.add(element);
+            elementList.add(element); //TODO refactor
           } else {
             GameElement element = new Floor(posXCounter, posYCounter);
             fieldLists[subIndex][index] = element;
             elementList.add(element);
           }
-          posXCounter += 1;
+          posXCounter ++;
         }
         posXCounter = 0;
-        posYCounter += 1;
+        posYCounter ++;
       }
-      monsterGenerator(NUMBER_OF_MONSTERS);
-      elementList.addAll(monsterList);
-      elementList.add(hero);
-      elementList.add(boss);
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+  
+  void fillMapWithCharacters() {
+    monsterGenerator(NUMBER_OF_MONSTERS);
+    elementList.addAll(monsterList);
+    elementList.add(hero);
+    elementList.add(boss);
   }
   
   void drawTable(Graphics graphics){
@@ -91,31 +93,36 @@ class Table {
     monsterList.add(boss);
   }
   
-  void stageComplated(){
+  private void stageCompleted(){
     //Show new stage subtitle
     currentStage++;
-    for (int i = 0; i < monsterList.size(); i++) {
-      monsterList.get(i).resurrect();
+    for (Monster monster : monsterList) {
+      monster.resurrect();
       randomNumber.genRandStartPos(false);
-      monsterList.get(i).setPositionX(randomNumber.getPosX());
-      monsterList.get(i).setPositionY(randomNumber.getPosY());
-      monsterList.get(i).levelUp();
+      monster.levelUp();
+      monster.setPosition();
     }
     hero.restoreHeroHP();
     hero.depriveFromKey();
   }
-  int getCurrentStage(){
+  
+  static int getCurrentStage(){
     return currentStage;
   }
   
-  private boolean battle(Moving attacker, Moving defender){
+  private void stageReset(){
+    currentStage = 1;
+  }
+  
+  private boolean battleAttackerWon(Moving attacker, Moving defender){
     //TODO set a third type picture to illustrate the battle
     int roundCounter = 0;
     do {
-      double attackerSV = attacker.getStrikeP() + randomNumber.dice()*2;
-      double defenderSV = defender.getStrikeP() + randomNumber.dice()*2;
+      double attackerSV = calculateStrikePoint(attacker);
+      double defenderSV = calculateStrikePoint(defender);
       if (roundCounter % 2 == 0){
         if (attackerSV > defender.getDefendP()){
+          
           defender.setCurrentHP(defender.getCurrentHP() - (attackerSV - defender.getDefendP()));
         }
       } else {
@@ -132,6 +139,10 @@ class Table {
       passKeyIfHas(defender);
     }
     return heroIsWinner;
+  }
+  
+  private double calculateStrikePoint(Moving participant) {
+    return participant.getStrikeP() + randomNumber.dice()*2;
   }
   
   private void passKeyIfHas(Moving character) {
@@ -152,17 +163,6 @@ class Table {
     if(isNotGameOver) {
       moveHero(e);
       checkCharacters(e);
-    } else {
-      checkDecision(e);
-    }
-  }
-  
-  private void checkDecision(KeyEvent e) {
-    if (e.getKeyCode() == KeyEvent.VK_ENTER){
-      //Start over again from the beginning
-    }
-    if (e.getKeyCode() == KeyEvent.VK_ESCAPE){
-      //Quit
     }
   }
   
@@ -186,25 +186,53 @@ class Table {
     for (Monster aMonsterList : monsterList) {
       monster = aMonsterList;
       if (! (monster.isDead())) {
-        if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY()) {
+        if (heroMonsterSamePos(monster)) {
           hero.setSourceIMG("heroSword.png");
-          if (e.getKeyCode() == KeyEvent.VK_SPACE){
-            if (battle(hero, monster)) {
-              hero.levelUp();
-            } else {
-              isNotGameOver = false;
-            }
+          if (monster.getPrevPositionX() != monster.getPositionX() || monster.getPrevPositionY() != monster.getPositionY()){
+            resultBattle(battleAttackerWon(hero, monster));
+            break;
           }
-          break;
+          if (e.getKeyCode() == KeyEvent.VK_SPACE){
+            resultBattle(battleAttackerWon(hero, monster));
+            break;
+          }
         }
-        //if (hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY() && monster.getPrevPositionX() != monster.getPositionX() || monster.getPrevPostitionY() != monster.getPositionY()){
-          //battle(monster, hero);
-          //break;
-       // }
       }
     }
     if(boss.isDead() && hero.getHasKey()){
-    stageComplated();
+    stageCompleted();
     }
+  }
+  
+  private void resultBattle(boolean b) {
+    if (b) {
+      hero.levelUp();
+    } else {
+      isNotGameOver = false;
+    }
+  }
+  
+  void drawStats(Graphics graphics) {
+    drawStatusBar(hero, graphics);
+    monsterList.stream().filter(this :: heroMonsterSamePos).forEach(monster -> drawStatusBar(monster, graphics));
+  }
+  
+  private void drawStatusBar(Moving character, Graphics graphics) {
+    graphics.setColor(Color.WHITE);
+    graphics.fillRect(350,0,370,30);
+    graphics.setColor(Color.BLACK);
+    graphics.setFont(f);
+    graphics.drawString(character.toString(), 350, 25);
+  }
+  
+  private boolean heroMonsterSamePos(Moving monster){
+    return hero.getPositionX() == monster.getPositionX() && hero.getPositionY() == monster.getPositionY();
+  }
+  
+  void reset(){
+    elementList.removeAll(elementList);
+    monsterList.removeAll(monsterList);
+    stageReset();
+    isNotGameOver = true;
   }
 }

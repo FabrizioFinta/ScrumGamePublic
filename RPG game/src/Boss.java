@@ -13,4 +13,12 @@ class Boss extends Monster {
     super.resurrect();
     setSourceIMG("boss.png");
   }
+  
+  @Override
+  void levelUp() {
+    super.levelUp();
+    setMaxHP(getMaxHP() + Table.randomNumber.dice());
+    setDefendP(getDefendP() + Table.randomNumber.dice()/2);
+    setStrikeP(getStrikeP() + Table.getCurrentStage());
+  }
 }

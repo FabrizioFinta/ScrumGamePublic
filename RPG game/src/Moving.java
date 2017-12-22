@@ -31,7 +31,6 @@ public abstract class Moving extends GameElement{
     }
   }
   protected void moveDown(){
-  
     if (super.getPositionY() < 9) {
       if (!(Table.fieldLists[super.getPositionX()][getPositionY()+1] instanceof Wall)) {
         super.setPositionY(super.getPositionY() + 1);
@@ -83,7 +82,7 @@ public abstract class Moving extends GameElement{
   
   void restoreHP(){
     setCurrentHP(getMaxHP());
-  } //DOESNT WORK
+  }
   
   boolean isDead() {
     return isDead;
@@ -99,5 +98,15 @@ public abstract class Moving extends GameElement{
   
   void levelUp(){
     level++;
+  }
+  
+  int getLevel(){
+    return level;
+  }
+  
+  @Override
+  public String toString() {
+    return getClass().getSimpleName() + " " + "Level " + getLevel() + " " +
+                   "HP: " + getCurrentHP()+"/"+getMaxHP() + " | DP: " + getDefendP() + " | SP: " + getStrikeP();
   }
 }
